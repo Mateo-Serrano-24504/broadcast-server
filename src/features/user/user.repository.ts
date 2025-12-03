@@ -1,13 +1,14 @@
-import { User, UserData } from '../user';
+import { User, UserData, UserCreateError, UserRemoveError } from '../user';
+import type { Result } from '../../types';
 
 export interface UserRepository {
-  /// Returns the user ID
-  /// Throws an exception if the user already exists
-  save(userData: UserData): Promise<number>;
+  /// Returns the user added to the repository
+  save(userData: UserData): Promise<Result<User, UserCreateError>>;
 
   /// Returns the user itself if found
-  remove(userId: number): Promise<void | User>;
+  remove(userId: number): Promise<Result<User, UserRemoveError>>;
 
   verifyUserById(userId: number): Promise<boolean>;
   findUserById(userId: number): Promise<void | User>;
+  findUserByData(userData: UserData): Promise<void | User>;
 }

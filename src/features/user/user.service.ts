@@ -1,5 +1,13 @@
-import { User, UserRepository, UserData } from '../user';
-import { AuthService, InvalidCredentialsError, JwtPayload } from '../auth';
+import {
+  User,
+  UserRepository,
+  UserData,
+  UserCreateError,
+  UserRemoveError,
+  UserLoginError,
+} from '../user';
+import { AuthService } from '../auth';
+import { Result, Error, Ok } from '../../types';
 
 export class UserService {
   constructor(
@@ -7,17 +15,18 @@ export class UserService {
     private authService: AuthService
   ) {}
 
-  async createUser(userData: UserData): Promise<number> {
+  async createUser(userData: UserData): Promise<Result<User, UserCreateError>> {
     return this.userRepository.save(userData);
   }
-  async removeUser(userId: number): Promise<void | User> {
+  async removeUser(userId: number): Promise<Result<User, UserRemoveError>> {
     return this.userRepository.remove(userId);
   }
-  async loginUser(jwtPayload: JwtPayload): Promise<string> {
-    if (await this.userRepository.verifyUserById(jwtPayload.id)) {
-      return this.authService.generateAccessToken(jwtPayload);
+  async loginUser(userData: UserData): Promise<Result<string, UserLoginError>> {
+    const user = await this.userRepository.findUserByData(userData);
+    if (user) {
+      return Ok(this.authService.generateAccessToken(user));
     } else {
-      throw new InvalidCredentialsError();
+      return Error(new UserLoginError());
     }
   }
 }
