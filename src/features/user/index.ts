@@ -7,4 +7,5 @@ export {
   UserCreateError,
   UserLoginError,
   UserRemoveError,
+  UserRegisterError,
 } from './user.errors';

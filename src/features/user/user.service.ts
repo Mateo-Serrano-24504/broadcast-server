@@ -2,9 +2,9 @@ import {
   User,
   UserRepository,
   UserData,
-  UserCreateError,
   UserRemoveError,
   UserLoginError,
+  UserRegisterError,
 } from '../user';
 import { AuthService, TokenSet } from '../auth';
 import { Result, Error, Ok } from '../../types';
@@ -15,9 +15,6 @@ export class UserService {
     private authService: AuthService
   ) {}
 
-  async createUser(userData: UserData): Promise<Result<User, UserCreateError>> {
-    return this.userRepository.save(userData);
-  }
   async removeUser(userId: number): Promise<Result<User, UserRemoveError>> {
     return this.userRepository.remove(userId);
   }
@@ -29,6 +26,16 @@ export class UserService {
       return Ok(this.authService.generateTokens(user));
     } else {
       return Error(new UserLoginError());
+    }
+  }
+  async registerUser(
+    userData: UserData
+  ): Promise<Result<User, UserRegisterError>> {
+    const result = await this.userRepository.save(userData);
+    if (result.ok) {
+      return Ok(result.value);
+    } else {
+      return Error(new UserRegisterError());
     }
   }
 }
