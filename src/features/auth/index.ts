@@ -1,4 +1,4 @@
 export { authRouter } from './auth.router';
 export { AuthService } from './auth.service';
-export { JwtPayload } from './auth.types';
+export { JwtPayload, TokenSet } from './auth.types';
 export { InvalidCredentialsError } from './auth.errors';

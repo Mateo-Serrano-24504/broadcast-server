@@ -6,7 +6,7 @@ import {
   UserRemoveError,
   UserLoginError,
 } from '../user';
-import { AuthService } from '../auth';
+import { AuthService, TokenSet } from '../auth';
 import { Result, Error, Ok } from '../../types';
 
 export class UserService {
@@ -21,10 +21,12 @@ export class UserService {
   async removeUser(userId: number): Promise<Result<User, UserRemoveError>> {
     return this.userRepository.remove(userId);
   }
-  async loginUser(userData: UserData): Promise<Result<string, UserLoginError>> {
+  async loginUser(
+    userData: UserData
+  ): Promise<Result<TokenSet, UserLoginError>> {
     const user = await this.userRepository.findUserByData(userData);
     if (user) {
-      return Ok(this.authService.generateAccessToken(user));
+      return Ok(this.authService.generateTokens(user));
     } else {
       return Error(new UserLoginError());
     }
