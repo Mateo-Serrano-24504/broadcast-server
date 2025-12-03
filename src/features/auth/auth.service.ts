@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { JwtPayload } from './auth.types';
+import { JwtPayload } from '../auth';
 import { JWT_SECRET } from '../../config';
 
 export class AuthService {
