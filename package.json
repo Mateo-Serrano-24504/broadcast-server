@@ -8,9 +8,9 @@
     "dev": "tsx watch src/index.ts",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "commit": "cz",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "try-commit": "npm run format && npm run lint && cz"
   },
   "config": {
     "commitizen": {
