@@ -1,4 +1,4 @@
-import type { UserRole, UserData } from './user.types';
+import type { UserRole, UserData } from '../user';
 
 export class User {
   constructor(
@@ -7,7 +7,7 @@ export class User {
     private _password: string,
     private _role: UserRole
   ) {}
-  fromUserData(id: number, userData: UserData): User {
+  static fromUserData(id: number, userData: UserData): User {
     return new User(id, userData.username, userData.password, userData.role);
   }
   get id() {
