@@ -17,3 +17,9 @@ export function Ok<T>(value: T): Ok<T> {
 export function Error<E>(error: E): Error<E> {
   return { ok: false, error };
 }
+
+export function assertOk<T>(value: Result<T, unknown>): asserts value is Ok<T> {
+  if (!value.ok) {
+    throw new Error('Expected an Ok result');
+  }
+}
