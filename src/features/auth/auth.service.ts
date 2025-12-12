@@ -7,6 +7,7 @@ import crypto from 'crypto';
 export class AuthService {
   constructor() {}
 
+  // TODO: Add refresh token persistence and a RefreshTokenRepository
   private generateJwtPayload(user: User): JwtPayload {
     return { id: user.id, username: user.username, role: user.role };
   }
