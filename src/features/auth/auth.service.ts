@@ -17,9 +17,6 @@ export class AuthService {
   private generateRefreshToken(): string {
     return crypto.randomBytes(64).toString('hex');
   }
-  verifyAccessToken(token: string): JwtPayload {
-    return jwt.verify(token, JWT_SECRET) as JwtPayload;
-  }
   generateTokens(user: User): TokenSet {
     return {
       access: this.generateAccessToken(user),

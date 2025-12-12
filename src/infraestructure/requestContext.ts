@@ -20,17 +20,36 @@ class RequestContextStorage {
     }
     return Ok(store[key]);
   }
+  private setRequestContextField<Key extends keyof RequestContext>(
+    key: Key,
+    value: RequestContext[Key]
+  ) {
+    const store = this.storage.getStore();
+    if (!store) {
+      return Error(new RequestContextError(key));
+    }
+    store[key] = value;
+  }
   run(requestContext: RequestContext, callback: () => void) {
     this.storage.run(requestContext, callback);
   }
   get userId(): Result<void | number, RequestContextError> {
     return this.getRequestContextField('userId');
   }
+  setUserId(id?: number): Result<void, RequestContextError> {
+    return this.setRequestContextField('userId', id);
+  }
   get userName(): Result<void | string, RequestContextError> {
     return this.getRequestContextField('userName');
   }
+  setUserName(name?: string): Result<void, RequestContextError> {
+    return this.setRequestContextField('userName', name);
+  }
   get userRole(): Result<void | UserRole, RequestContextError> {
     return this.getRequestContextField('userRole');
+  }
+  setUserRole(role?: UserRole): Result<void, RequestContextError> {
+    return this.setRequestContextField('userRole', role);
   }
 }
 
