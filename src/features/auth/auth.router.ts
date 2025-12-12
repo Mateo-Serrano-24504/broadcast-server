@@ -9,7 +9,3 @@ authRouter.post('/register', () => {
 authRouter.post('/login', () => {
   console.log('USER LOGIN');
 });
-
-authRouter.post('/logout', () => {
-  console.log('USER LOGOT');
-});
