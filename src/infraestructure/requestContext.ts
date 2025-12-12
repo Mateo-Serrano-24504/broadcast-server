@@ -9,7 +9,13 @@ export interface RequestContext {
   userRole?: UserRole;
 }
 
-class RequestContextStorage {
+export interface RequestContextProvider {
+  get userId(): Result<void | number, RequestContextError>;
+  get userName(): Result<void | string, RequestContextError>;
+  get userRole(): Result<void | UserRole, RequestContextError>;
+}
+
+class RequestContextStorage implements RequestContextProvider {
   private storage = new AsyncLocalStorage<RequestContext>();
   private getRequestContextField<Key extends keyof RequestContext>(
     key: Key
