@@ -11,7 +11,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint-and-format-staged": "lint-staged",
-    "trycmt": "npm run lint-and-format-staged && cz"
+    "test": "vitest",
+    "test:run": "vitest run",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -19,13 +21,9 @@
       "prettier --write"
     ]
   },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
-  },
   "dependencies": {
     "@prisma/client": "^7.1.0",
+    "argon2": "^0.44.0",
     "dotenv": "^17.2.3",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
@@ -37,10 +35,9 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.10.4",
     "@types/socket.io": "^3.0.2",
-    "commitizen": "^4.3.1",
-    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
     "prettier": "^3.6.2",
     "prisma": "^7.1.0",
