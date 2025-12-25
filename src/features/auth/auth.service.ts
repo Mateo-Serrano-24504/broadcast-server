@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { UserCredentials, TokenSet } from './auth.types';
+import { UserCredentials } from './auth.types';
+import { TokenSet } from './token';
 import { JWT_SECRET } from '../../config';
 import { User } from '../user';
 import crypto from 'crypto';
