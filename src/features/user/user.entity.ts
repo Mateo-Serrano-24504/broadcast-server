@@ -1,4 +1,4 @@
-import type { UserRole, UserData } from '../user';
+import type { UserRole } from './user.types';
 import { Entity } from '../../infraestructure';
 
 export class User implements Entity<number> {
