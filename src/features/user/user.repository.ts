@@ -1,4 +1,4 @@
-import { User, UserData, UserCreateError, UserRemoveError } from '../user';
+import { User, UserData, UserSaveError, UserRemoveError } from '../user';
 import { Result, Ok, Error } from '../../types';
 import { prisma, userFromPrismaUser } from '../../db';
 import { Repository } from '../../infraestructure';
@@ -9,14 +9,14 @@ export interface UserRepository extends Repository<User, UserData, number> {
 }
 
 export class PrismaUserRepository implements UserRepository {
-  async save(userData: UserData): Promise<Result<User, UserCreateError>> {
+  async save(userData: UserData): Promise<Result<User, UserSaveError>> {
     try {
       const user = await prisma.user.create({
         data: userData,
       });
       return Ok(userFromPrismaUser(user));
-    } catch (error) {
-      return Error(new UserCreateError());
+    } catch {
+      return Error(new UserSaveError());
     }
   }
 
@@ -37,7 +37,7 @@ export class PrismaUserRepository implements UserRepository {
         },
       });
       return Ok(userFromPrismaUser(user));
-    } catch (error) {
+    } catch {
       return Error(new UserRemoveError());
     }
   }

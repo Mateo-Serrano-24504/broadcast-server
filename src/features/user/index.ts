@@ -5,7 +5,7 @@ export { UserRepository } from './user.repository';
 export { UserService } from './user.service';
 export { UserFactory } from './user.factory';
 export {
-  UserCreateError,
+  UserSaveError,
   UserLoginError,
   UserRemoveError,
   UserRegisterError,

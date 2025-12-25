@@ -1,18 +1,38 @@
 import { Result } from '../types';
+import { RepositoryError } from './repository.errors';
 
+/**
+ * @description A generic entity interface
+ * @template Id The type of the entity's id
+ * */
 export interface Entity<Id> {
   get id(): Id;
 }
 
+/**
+ * @description A generic repository interface with minimal required operations
+ * @template En The entity type
+ * @template T The data type used to create the entity
+ * @template Id The type of the entity's id
+ * */
 export interface Repository<En extends Entity<Id>, T, Id> {
-  /// On success, saves the data to the repository and assings it an id
-  /// On failure, returns a custom Err
-  save<Err extends Error>(data: T): Promise<Result<En, Err>>;
+  /**
+   * @description Saves a new entity to the repository and assigns it an id
+   * @returns On success, returns the saved entity. On failure, returns a
+   * RepositoryError, commonly a RepositorySaveError
+   * */
+  save(data: T): Promise<Result<En, RepositoryError>>;
 
-  /// Returns either the entity or null if not found
+  /**
+   * @returns On success, returns the found entity. On failure, returns null
+   * */
   findById(id: Id): Promise<En | null>;
 
-  /// On success, removes the entity from the repository
-  /// On failure, returns a custom Err
-  remove<Err extends Error>(id: Id): Promise<Result<En, Err>>;
+  /**
+   * @description Removes the entity with the id provided entity from the
+   * repository
+   * @returns On success, returns the removed entity. On failure, returns a
+   * RepositoryError, commonly a RepositoryRemoveError
+   * */
+  remove(id: Id): Promise<Result<En, RepositoryError>>;
 }

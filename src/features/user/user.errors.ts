@@ -1,14 +1,17 @@
-export class UserCreateError extends Error {
+import {
+  RepositorySaveError,
+  RepositoryRemoveError,
+} from '../../infraestructure';
+
+export class UserSaveError extends RepositorySaveError {
   constructor() {
     super('Error in creation of user');
-    this.name = 'UserCreateError';
   }
 }
 
-export class UserRemoveError extends Error {
+export class UserRemoveError extends RepositoryRemoveError {
   constructor() {
     super('Error when removing a user');
-    this.name = 'UserRemoveError';
   }
 }
 
