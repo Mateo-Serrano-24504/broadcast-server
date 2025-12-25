@@ -7,7 +7,7 @@ import {
   UserRegisterError,
 } from '../user';
 import { AuthService, TokenSet } from '../auth';
-import { Result, Error, Ok } from '../../types';
+import { Result, Err, Ok } from '../../types';
 import { PasswordHasher } from '../../security';
 
 export class UserService {
@@ -27,7 +27,7 @@ export class UserService {
     if (user) {
       return Ok(this.authService.generateTokens(user));
     } else {
-      return Error(new UserLoginError());
+      return Err(new UserLoginError());
     }
   }
   async registerUser(
@@ -41,7 +41,7 @@ export class UserService {
     if (result.ok) {
       return Ok(result.value);
     } else {
-      return Error(new UserRegisterError());
+      return Err(new UserRegisterError());
     }
   }
 }

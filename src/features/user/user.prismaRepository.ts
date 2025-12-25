@@ -1,5 +1,5 @@
 import { UserData } from './user.types';
-import { Error, Ok, Result } from '../../types';
+import { Err, Ok, Result } from '../../types';
 import { User } from './user.entity';
 import { UserRemoveError, UserSaveError } from './user.errors';
 import { prisma, userFromPrismaUser } from '../../db';
@@ -13,7 +13,7 @@ export class PrismaUserRepository implements UserRepository {
       });
       return Ok(userFromPrismaUser(user));
     } catch {
-      return Error(new UserSaveError());
+      return Err(new UserSaveError());
     }
   }
 
@@ -35,7 +35,7 @@ export class PrismaUserRepository implements UserRepository {
       });
       return Ok(userFromPrismaUser(user));
     } catch {
-      return Error(new UserRemoveError());
+      return Err(new UserRemoveError());
     }
   }
 
