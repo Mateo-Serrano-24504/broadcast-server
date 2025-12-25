@@ -7,17 +7,27 @@ datasource db {
 }
 
 model User {
-  id       Int        @id @default(autoincrement())
-  username String     @unique
-  password String
-  role     String
-  rooms    RoomUser[]
+  id            Int            @id @default(autoincrement())
+  username      String         @unique
+  password      String
+  role          String
+  rooms         RoomUser[]
+  refereshToken RefreshToken[]
 }
 
 model Room {
   id      Int        @id @default(autoincrement())
   name    String
   members RoomUser[]
+}
+
+model RefreshToken {
+  id     Int    @id @default(autoincrement())
+  token  String @unique
+  userId Int
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model RoomUser {
