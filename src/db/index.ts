@@ -1,2 +1,5 @@
 export { prisma } from './prisma';
-export { userFromPrismaUser } from './prisma.entities';
+export {
+  userFromPrismaUser,
+  refreshTokenFromPrismaRefreshToken,
+} from './prisma.entities';
