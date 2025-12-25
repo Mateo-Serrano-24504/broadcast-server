@@ -2,13 +2,16 @@ import { UserData } from './user.types';
 import { Err, Ok, Result } from '../../types';
 import { User } from './user.entity';
 import { UserRemoveError, UserSaveError } from './user.errors';
-import { prisma, userFromPrismaUser } from '../../db';
+import { userFromPrismaUser } from '../../db';
 import { UserRepository } from './user.repository';
+import { PrismaClient } from '@prisma/client';
 
 export class PrismaUserRepository implements UserRepository {
+  constructor(private readonly prisma: PrismaClient) {}
+
   async save(userData: UserData): Promise<Result<User, UserSaveError>> {
     try {
-      const user = await prisma.user.create({
+      const user = await this.prisma.user.create({
         data: userData,
       });
       return Ok(userFromPrismaUser(user));
@@ -18,7 +21,7 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async findById(userId: number): Promise<User | null> {
-    const user = await prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
@@ -28,7 +31,7 @@ export class PrismaUserRepository implements UserRepository {
 
   async remove(userId: number): Promise<Result<User, UserRemoveError>> {
     try {
-      const user = await prisma.user.delete({
+      const user = await this.prisma.user.delete({
         where: {
           id: userId,
         },
@@ -40,7 +43,7 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async findByData(userData: UserData): Promise<User | null> {
-    const user = await prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: {
         username: userData.username,
       },
@@ -49,7 +52,7 @@ export class PrismaUserRepository implements UserRepository {
   }
 
   async verifyById(userId: number): Promise<boolean> {
-    const user = await prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
       },
