@@ -1,27 +1,31 @@
-import jwt from 'jsonwebtoken';
 import { UserCredentials } from './auth.types';
-import { TokenSet } from './token';
-import { JWT_SECRET } from '../../config';
+import { TokenService, TokenSet } from './token';
 import { User } from '../user';
-import crypto from 'crypto';
 
 export class AuthService {
-  constructor() {}
+  constructor(
+    private accessTokenService: TokenService<UserCredentials, string>,
+    private refreshTokenService: TokenService<UserCredentials, string>
+  ) {}
 
-  // TODO: Add refresh token persistence and a RefreshTokenRepository
-  private generateJwtPayload(user: User): UserCredentials {
+  private getUserCredentials(user: User): UserCredentials {
     return { id: user.id, username: user.username, role: user.role };
   }
-  private generateAccessToken(user: User): string {
-    return jwt.sign(this.generateJwtPayload(user), JWT_SECRET);
+  private async generateAccessToken(
+    credentials: UserCredentials
+  ): Promise<string> {
+    return this.accessTokenService.generateToken(credentials);
   }
-  private generateRefreshToken(): string {
-    return crypto.randomBytes(64).toString('hex');
+  private async generateRefreshToken(
+    credentials: UserCredentials
+  ): Promise<string> {
+    return this.refreshTokenService.generateToken(credentials);
   }
-  generateTokens(user: User): TokenSet {
+  async generateTokens(user: User): Promise<TokenSet> {
+    const credentials = this.getUserCredentials(user);
     return {
-      access: this.generateAccessToken(user),
-      refresh: this.generateRefreshToken(),
+      access: await this.generateAccessToken(credentials),
+      refresh: await this.generateRefreshToken(credentials),
     };
   }
 }
