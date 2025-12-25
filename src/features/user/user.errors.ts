@@ -3,6 +3,13 @@ import {
   RepositoryRemoveError,
 } from '../../infraestructure';
 
+export class UserInvalidRoleError extends Error {
+  constructor() {
+    super('Invalid role');
+    this.name = 'UserInvalidRoleError';
+  }
+}
+
 export class UserSaveError extends RepositorySaveError {
   constructor() {
     super('Error in creation of user');
