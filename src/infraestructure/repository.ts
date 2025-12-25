@@ -1,13 +1,6 @@
 import { Result } from '../types';
 import { RepositoryError } from './repository.errors';
-
-/**
- * @description A generic entity interface
- * @template Id The type of the entity's id
- * */
-export interface Entity<Id> {
-  get id(): Id;
-}
+import { Entity } from './types';
 
 /**
  * @description A generic repository interface with minimal required operations
