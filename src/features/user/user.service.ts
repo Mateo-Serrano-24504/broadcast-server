@@ -5,7 +5,7 @@ import {
   UserLoginError,
   UserRegisterError,
 } from './user.errors';
-import { LoginDTO, RegisterDTO, UserRoles } from './user.types';
+import { LoginDTO, LogoutDTO, RegisterDTO, UserRoles } from './user.types';
 import { AuthService, TokenSet } from '../auth';
 import { PasswordHasher } from '../../security';
 import { Result, Err, Ok } from '../../types';
@@ -17,18 +17,12 @@ export class UserService {
     private passwordHasher: PasswordHasher
   ) {}
 
-  async removeUser(userId: number): Promise<Result<User, UserRemoveError>> {
-    return this.userRepository.remove(userId);
-  }
-
   /**
    * @description Logs in a user with the given credentials.
    * @param loginDTO The credentials to log in with
    * @returns The tokens generated for the user
    */
-  async loginUser(
-    loginDTO: LoginDTO
-  ): Promise<Result<TokenSet, UserLoginError>> {
+  async login(loginDTO: LoginDTO): Promise<Result<TokenSet, UserLoginError>> {
     loginDTO.password = await this.passwordHasher.hash(loginDTO.password);
     const user = await this.userRepository.findByUsernameAndPassword(
       loginDTO.username,
@@ -46,7 +40,7 @@ export class UserService {
    * @param registerDTO The credentials to register with
    * @returns The tokens generated for the user
    */
-  async registerUser(
+  async register(
     registerDTO: RegisterDTO
   ): Promise<Result<TokenSet, UserRegisterError>> {
     registerDTO.password = await this.passwordHasher.hash(registerDTO.password);
