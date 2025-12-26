@@ -33,3 +33,8 @@ export interface RegisterDTO {
   password: string;
   username: string;
 }
+
+export interface LogoutDTO {
+  accessToken: string;
+  refreshToken: string;
+}

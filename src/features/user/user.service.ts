@@ -54,4 +54,16 @@ export class UserService {
       return Err(new UserRegisterError());
     }
   }
+
+  /**
+   * @description Logs out a user with the given tokens.
+   * @param logoutDTO The tokens to invalidate
+   */
+  async logout(logoutDTO: LogoutDTO): Promise<void> {
+    const tokenSet = {
+      access: logoutDTO.accessToken,
+      refresh: logoutDTO.refreshToken,
+    };
+    return this.authService.invalidateTokens(tokenSet);
+  }
 }

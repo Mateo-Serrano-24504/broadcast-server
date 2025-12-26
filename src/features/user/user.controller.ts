@@ -1,5 +1,5 @@
 import { UserService } from './user.service';
-import { LoginDTO, RegisterDTO } from './user.types';
+import { LoginDTO, LogoutDTO, RegisterDTO } from './user.types';
 
 export class UserController {
   constructor(private userService: UserService) {}
@@ -10,5 +10,9 @@ export class UserController {
 
   async registerUser(registerDTO: RegisterDTO) {
     return await this.userService.register(registerDTO);
+  }
+
+  async logoutUser(logoutDTO: LogoutDTO) {
+    return await this.userService.logout(logoutDTO);
   }
 }
