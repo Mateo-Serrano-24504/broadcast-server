@@ -1,11 +1,12 @@
 import { UserCredentials } from './auth.types';
 import { TokenService, TokenSet } from './token';
 import { User } from '../user';
+import { RefreshTokenService } from './token/token.refreshToken.Service';
 
 export class AuthService {
   constructor(
     private accessTokenService: TokenService<UserCredentials, string>,
-    private refreshTokenService: TokenService<UserCredentials, string>
+    private refreshTokenService: RefreshTokenService<UserCredentials, string>
   ) {}
 
   private getUserCredentials(user: User): UserCredentials {
@@ -27,5 +28,8 @@ export class AuthService {
       access: await this.generateAccessToken(credentials),
       refresh: await this.generateRefreshToken(credentials),
     };
+  }
+  async invalidateTokens(tokenSet: TokenSet): Promise<void> {
+    return this.refreshTokenService.invalidateToken(tokenSet.refresh);
   }
 }

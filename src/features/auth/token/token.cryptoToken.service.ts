@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import { TokenService } from './token.service';
 import { RefreshTokenRepository } from './token.refreshTokenRepository';
 import { UserCredentials } from '../auth.types';
 import { assertOk } from '../../../types';
 import { assertHasValue } from '../../../utils/functions';
+import { RefreshTokenService } from './token.refreshToken.Service';
 
-export class CryptoTokenService implements TokenService<
+export class CryptoTokenService implements RefreshTokenService<
   UserCredentials,
   string
 > {
@@ -35,5 +35,9 @@ export class CryptoTokenService implements TokenService<
     const refresh = await this.refreshTokenRepository.findByToken(token);
     assertHasValue(refresh);
     return refresh.userCredentials;
+  }
+
+  async invalidateToken(token: string): Promise<void> {
+    return this.refreshTokenRepository.removeByToken(token);
   }
 }
