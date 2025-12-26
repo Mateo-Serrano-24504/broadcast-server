@@ -1,10 +1,5 @@
-import { User } from './user.entity';
 import { UserRepository } from './user.repository';
-import {
-  UserRemoveError,
-  UserLoginError,
-  UserRegisterError,
-} from './user.errors';
+import { UserLoginError, UserRegisterError } from './user.errors';
 import { LoginDTO, LogoutDTO, RegisterDTO, UserRoles } from './user.types';
 import { AuthService, TokenSet } from '../auth';
 import { PasswordHasher } from '../../security';
