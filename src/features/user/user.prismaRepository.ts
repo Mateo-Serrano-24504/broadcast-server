@@ -59,4 +59,14 @@ export class PrismaUserRepository implements UserRepository {
     });
     return !!user;
   }
+
+  async findByUsernameAndPassword(
+    username: string,
+    password: string
+  ): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { username, password },
+    });
+    return user ? userFromPrismaUser(user) : null;
+  }
 }
