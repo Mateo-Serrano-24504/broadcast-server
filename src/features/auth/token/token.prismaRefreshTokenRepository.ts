@@ -19,6 +19,10 @@ export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
     return token ? refreshTokenFromPrismaRefreshToken(token) : null;
   }
 
+  async removeByToken(token: string): Promise<void> {
+    await this.prisma.refreshToken.delete({ where: { token } });
+  }
+
   async remove(
     id: number
   ): Promise<Result<RefreshTokenEntity, TokenRemoveError>> {

@@ -14,4 +14,5 @@ export interface TokenRepository<
   TValue,
 > extends Repository<T, TData, number> {
   findByToken(token: TValue): Promise<null | T>;
+  removeByToken(token: TValue): Promise<void>;
 }
