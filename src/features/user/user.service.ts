@@ -1,14 +1,14 @@
+import { User } from './user.entity';
+import { UserRepository } from './user.repository';
 import {
-  User,
-  UserRepository,
-  UserData,
   UserRemoveError,
   UserLoginError,
   UserRegisterError,
-} from '../user';
+} from './user.errors';
+import { LoginDTO, RegisterDTO, UserRoles } from './user.types';
 import { AuthService, TokenSet } from '../auth';
-import { Result, Err, Ok } from '../../types';
 import { PasswordHasher } from '../../security';
+import { Result, Err, Ok } from '../../types';
 
 export class UserService {
   constructor(
@@ -20,26 +20,42 @@ export class UserService {
   async removeUser(userId: number): Promise<Result<User, UserRemoveError>> {
     return this.userRepository.remove(userId);
   }
+
+  /**
+   * @description Logs in a user with the given credentials.
+   * @param loginDTO The credentials to log in with
+   * @returns The tokens generated for the user
+   */
   async loginUser(
-    userData: UserData
+    loginDTO: LoginDTO
   ): Promise<Result<TokenSet, UserLoginError>> {
-    const user = await this.userRepository.findByData(userData);
+    loginDTO.password = await this.passwordHasher.hash(loginDTO.password);
+    const user = await this.userRepository.findByUsernameAndPassword(
+      loginDTO.username,
+      loginDTO.password
+    );
     if (user) {
-      return Ok(this.authService.generateTokens(user));
+      return Ok(await this.authService.generateTokens(user));
     } else {
       return Err(new UserLoginError());
     }
   }
+
+  /**
+   * @description Registers and logs in a user with the given credentials.
+   * @param registerDTO The credentials to register with
+   * @returns The tokens generated for the user
+   */
   async registerUser(
-    userData: UserData
-  ): Promise<Result<User, UserRegisterError>> {
-    const hashedPassword = await this.passwordHasher.hash(userData.password);
+    registerDTO: RegisterDTO
+  ): Promise<Result<TokenSet, UserRegisterError>> {
+    registerDTO.password = await this.passwordHasher.hash(registerDTO.password);
     const result = await this.userRepository.save({
-      ...userData,
-      password: hashedPassword,
+      ...registerDTO,
+      role: UserRoles.User,
     });
     if (result.ok) {
-      return Ok(result.value);
+      return Ok(await this.authService.generateTokens(result.value));
     } else {
       return Err(new UserRegisterError());
     }
