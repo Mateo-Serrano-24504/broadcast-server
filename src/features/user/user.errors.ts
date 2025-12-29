@@ -2,13 +2,7 @@ import {
   RepositorySaveError,
   RepositoryRemoveError,
 } from '../../infraestructure';
-
-export class UserInvalidRoleError extends Error {
-  constructor() {
-    super('Invalid role');
-    this.name = 'UserInvalidRoleError';
-  }
-}
+import { SelfNamedError } from '../../utils';
 
 export class UserSaveError extends RepositorySaveError {
   constructor() {
@@ -22,16 +16,20 @@ export class UserRemoveError extends RepositoryRemoveError {
   }
 }
 
-export class UserLoginError extends Error {
+export class UserInvalidRoleError extends SelfNamedError {
   constructor() {
-    super('Error in user login');
-    this.name = 'UserLoginError';
+    super('Invalid role');
   }
 }
 
-export class UserRegisterError extends Error {
+export class UserLoginError extends SelfNamedError {
+  constructor() {
+    super('Error in user login');
+  }
+}
+
+export class UserRegisterError extends SelfNamedError {
   constructor() {
     super('Error in user registration');
-    this.name = 'UserRegisterError';
   }
 }
