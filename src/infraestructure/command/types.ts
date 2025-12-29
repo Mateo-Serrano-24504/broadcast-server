@@ -1,3 +1,5 @@
+import { Result } from '../../types';
+
 /**
  * @description The type of the data returned by any endpoint
  * of the API. Although it might be interpreted as a JSON,
@@ -15,7 +17,7 @@ export type ApiResponseType =
 /**
  * @description The type returned by any command execution
  * */
-export interface ExecuteOutput<T> {
-  data: T;
+export interface ExecuteOutput<T, U extends Error> {
+  data: Result<T, U>;
   statusCode: number;
 }

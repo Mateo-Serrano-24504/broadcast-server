@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { CommandExpress } from './command.express';
 import { ApiResponseType, ExecuteOutput } from './types';
 import type { ExpressInputAdapter, OutputAdapter } from '../adapter';
+import { Result } from '../../types';
 
 /**
  * @description A generic command for API endpoints. It uses
@@ -12,12 +13,16 @@ import type { ExpressInputAdapter, OutputAdapter } from '../adapter';
 export abstract class CommandApiEndpoint<
   ExecIn,
   T,
+  U extends Error,
 > extends CommandExpress<void> {
   protected constructor(
     request: Request,
     response: Response,
     protected readonly expressInputAdapter: ExpressInputAdapter<ExecIn>,
-    protected readonly outputAdapter: OutputAdapter<T, ApiResponseType>
+    protected readonly outputAdapter: OutputAdapter<
+      Result<T, U>,
+      ApiResponseType
+    >
   ) {
     super(request, response, null);
   }
@@ -39,5 +44,5 @@ export abstract class CommandApiEndpoint<
    * provided. Whether the return is a success or an error,
    * it is sent to the client as a JSON response.
    * */
-  abstract executeFromLocalFormat(data: ExecIn): Promise<ExecuteOutput<T>>;
+  abstract executeFromLocalFormat(data: ExecIn): Promise<ExecuteOutput<T, U>>;
 }
