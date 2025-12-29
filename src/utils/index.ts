@@ -1,0 +1,1 @@
+export { SelfNamedError } from './errors';
