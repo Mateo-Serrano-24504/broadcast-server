@@ -1,6 +1,6 @@
 import { Result } from '../../types';
 import { RepositoryError } from './repository.errors';
-import { Entity } from '../types';
+import { Entity } from './types';
 
 /**
  * @description A generic repository interface with minimal required operations
