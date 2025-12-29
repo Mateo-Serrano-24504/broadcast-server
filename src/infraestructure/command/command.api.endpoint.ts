@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { CommandExpress } from './command.express';
-import { ExecuteOutput } from './types';
-import type { ExpressInputAdapter } from '../adapter';
+import { ApiResponseType, ExecuteOutput } from './types';
+import type { ExpressInputAdapter, OutputAdapter } from '../adapter';
 
 /**
  * @description A generic command for API endpoints. It uses
@@ -9,11 +9,15 @@ import type { ExpressInputAdapter } from '../adapter';
  * request to a local format.
  * @template ExecIn The type of the data used to execute the command
  * */
-export abstract class CommandApiEndpoint<ExecIn> extends CommandExpress<void> {
+export abstract class CommandApiEndpoint<
+  ExecIn,
+  T,
+> extends CommandExpress<void> {
   protected constructor(
     request: Request,
     response: Response,
-    protected readonly expressInputAdapter: ExpressInputAdapter<ExecIn>
+    protected readonly expressInputAdapter: ExpressInputAdapter<ExecIn>,
+    protected readonly outputAdapter: OutputAdapter<T, ApiResponseType>
   ) {
     super(request, response, null);
   }
@@ -23,8 +27,9 @@ export abstract class CommandApiEndpoint<ExecIn> extends CommandExpress<void> {
       super.request
     );
     const result = await this.executeFromLocalFormat(localData);
+    const outputData = await this.outputAdapter.toExternalFormat(result.data);
     this.response.status(result.statusCode);
-    this.response.json(result.data);
+    this.response.json(outputData);
   }
 
   /**
@@ -34,5 +39,5 @@ export abstract class CommandApiEndpoint<ExecIn> extends CommandExpress<void> {
    * provided. Whether the return is a success or an error,
    * it is sent to the client as a JSON response.
    * */
-  abstract executeFromLocalFormat(data: ExecIn): Promise<ExecuteOutput>;
+  abstract executeFromLocalFormat(data: ExecIn): Promise<ExecuteOutput<T>>;
 }

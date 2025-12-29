@@ -15,7 +15,7 @@ export type ApiResponseType =
 /**
  * @description The type returned by any command execution
  * */
-export interface ExecuteOutput {
-  data: ApiResponseType;
+export interface ExecuteOutput<T> {
+  data: T;
   statusCode: number;
 }
