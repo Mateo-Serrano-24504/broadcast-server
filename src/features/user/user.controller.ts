@@ -1,5 +1,6 @@
 import { UserService } from './user.service';
 import { LoginDTO, LogoutDTO, RegisterDTO } from './user.types';
+import { Ok } from '../../types';
 
 export class UserController {
   constructor(private userService: UserService) {}
@@ -9,7 +10,14 @@ export class UserController {
   }
 
   async registerUser(registerDTO: RegisterDTO) {
-    return await this.userService.register(registerDTO);
+    const result = await this.userService.register(registerDTO);
+    let statusCode;
+    if (result.ok) {
+      statusCode = 201;
+    } else {
+      statusCode = 400;
+    }
+    return { result, statusCode };
   }
 
   async logoutUser(logoutDTO: LogoutDTO) {
