@@ -1,6 +1,5 @@
 import { UserService } from './user.service';
 import { LoginDTO, LogoutDTO, RegisterDTO } from './user.types';
-import { Ok } from '../../types';
 
 export class UserController {
   constructor(private userService: UserService) {}
