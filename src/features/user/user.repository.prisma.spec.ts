@@ -81,4 +81,15 @@ describe('PrismaUserRepository', () => {
       },
     });
   });
+  it('findById returns null when user data is invalid', async () => {
+    const userId = 1;
+    prismaClient.user.findUnique.mockResolvedValue(null);
+    const result = await repository.findById(userId);
+    expect(result).toEqual(null);
+    expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: userId,
+      },
+    });
+  });
 });
