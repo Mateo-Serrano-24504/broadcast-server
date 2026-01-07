@@ -1,7 +1,7 @@
 import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { PrismaUserRepository } from './user.repository.prisma';
 import { UserRoles } from './user.types';
-import { assertErr } from '../../types/result';
+import { assertErr, assertOk } from '../../types/result';
 import { UserSaveError } from './user.errors';
 
 describe('PrismaUserRepository', () => {
@@ -36,14 +36,13 @@ describe('PrismaUserRepository', () => {
       password: 'password',
     });
     const result = await repository.save(userData);
-    expect(result).toEqual({
-      ok: true,
-      value: {
-        id: 1,
-        username: 'user',
-        role: UserRoles.User,
-        password: 'password',
-      },
+    expect(result.ok).toBe(true);
+    assertOk(result);
+    expect(result.value).toEqual({
+      id: 1,
+      username: 'user',
+      role: UserRoles.User,
+      password: 'password',
     });
     expect(prismaClient.user.create).toHaveBeenCalledWith({ data: userData });
   });
