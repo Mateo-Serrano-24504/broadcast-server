@@ -14,7 +14,6 @@ describe('UserService', () => {
   };
   let hasher: {
     hash: ReturnType<typeof vi.fn>;
-    compare: ReturnType<typeof vi.fn>;
   };
   let service: UserService;
 
@@ -28,7 +27,6 @@ describe('UserService', () => {
     };
     hasher = {
       hash: vi.fn(),
-      compare: vi.fn(),
     };
     service = new UserService(repo as never, auth as never, hasher as never);
   });
