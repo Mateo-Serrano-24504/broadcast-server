@@ -127,4 +127,43 @@ describe('PrismaUserRepository', () => {
       },
     });
   });
+  it('findByData returns UserEntity when user data is valid', async () => {
+    const userData = {
+      username: 'user',
+      password: 'password',
+      role: UserRoles.User,
+    };
+    prismaClient.user.findUnique.mockResolvedValue({
+      id: 1,
+      username: 'user',
+      role: 'user',
+      password: 'password',
+    });
+    const result = await repository.findByData(userData);
+    expect(result).toEqual({
+      id: 1,
+      username: 'user',
+      role: UserRoles.User,
+      password: 'password',
+    });
+    expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        username: 'user',
+      },
+    });
+  });
+  it('findByData returns null when user data is invalid', async () => {
+    prismaClient.user.findUnique.mockResolvedValue(null);
+    const result = await repository.findByData({
+      username: 'user',
+      password: 'password',
+      role: UserRoles.User,
+    });
+    expect(result).toEqual(null);
+    expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        username: 'user',
+      },
+    });
+  });
 });
