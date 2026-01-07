@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { UserService } from './user.service';
-import { UserLoginError } from './user.errors';
-import { assertErr, Ok } from '../../types/result';
+import { UserLoginError, UserRegisterError } from './user.errors';
+import { assertErr, Err, Ok } from '../../types/result';
+import { RepositorySaveError } from '../../infraestructure';
 
 describe('UserService', () => {
   let repo: {
@@ -116,5 +117,25 @@ describe('UserService', () => {
       role: 'user',
     });
     expect(auth.generateTokens).toHaveBeenCalledWith(user);
+  });
+
+  it('returns error when credentials are invalid in register', async () => {
+    repo.save.mockResolvedValue(Err(new RepositorySaveError()));
+    hasher.hash.mockResolvedValue('hash');
+
+    const result = await service.register({
+      username: 'user',
+      password: '1234',
+    });
+
+    expect(result.ok).toBe(false);
+    assertErr(result);
+    expect(result.error).toBeInstanceOf(UserRegisterError);
+
+    expect(repo.save).toHaveBeenCalledWith({
+      username: 'user',
+      password: 'hash',
+      role: 'user',
+    });
   });
 });
