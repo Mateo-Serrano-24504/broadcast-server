@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { UserService } from './user.service';
+import { UserLoginError } from './user.errors';
+import { assertErr } from '../../types/result';
 
 describe('UserService', () => {
   let repo: {
@@ -28,7 +30,7 @@ describe('UserService', () => {
     service = new UserService(repo as never, auth as never, hasher as never);
   });
 
-  it('returns tokens when credentials are valid', async () => {
+  it('returns tokens when credentials are valid in login', async () => {
     const user = {
       id: 1,
       role: 'user',
@@ -42,7 +44,6 @@ describe('UserService', () => {
       refreshToken: 'refresh',
     });
     hasher.hash.mockResolvedValue('hash');
-    hasher.compare.mockResolvedValue(true);
 
     const result = await service.login({
       username: 'user',
@@ -59,5 +60,23 @@ describe('UserService', () => {
 
     expect(repo.findByUsernameAndPassword).toHaveBeenCalledWith('user', 'hash');
     expect(auth.generateTokens).toHaveBeenCalledWith(user);
+  });
+
+  it('returns error when credentials are invalid in login', async () => {
+    repo.findByUsernameAndPassword.mockResolvedValue(null);
+    hasher.hash.mockResolvedValue('hash');
+
+    const result = await service.login({
+      username: 'user',
+      password: '1234',
+    });
+
+    expect(result.ok).toBe(false);
+
+    // Just to grant 'result' has an error field
+    assertErr(result);
+    expect(result.error).toBeInstanceOf(UserLoginError);
+
+    expect(repo.findByUsernameAndPassword).toHaveBeenCalledWith('user', 'hash');
   });
 });
