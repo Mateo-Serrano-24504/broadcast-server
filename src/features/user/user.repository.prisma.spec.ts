@@ -2,7 +2,7 @@ import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { PrismaUserRepository } from './user.repository.prisma';
 import { UserRoles } from './user.types';
 import { assertErr, assertOk } from '../../types/result';
-import { UserSaveError } from './user.errors';
+import { UserRemoveError, UserSaveError } from './user.errors';
 
 describe('PrismaUserRepository', () => {
   let prismaClient: {
@@ -86,6 +86,42 @@ describe('PrismaUserRepository', () => {
     const result = await repository.findById(userId);
     expect(result).toEqual(null);
     expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: userId,
+      },
+    });
+  });
+  it('remove returns UserEntity when user data is valid', async () => {
+    const userId = 1;
+    prismaClient.user.delete.mockResolvedValue({
+      id: userId,
+      username: 'user',
+      role: 'user',
+      password: 'password',
+    });
+    const result = await repository.remove(userId);
+    expect(result.ok).toBe(true);
+    assertOk(result);
+    expect(result.value).toEqual({
+      id: userId,
+      username: 'user',
+      role: UserRoles.User,
+      password: 'password',
+    });
+    expect(prismaClient.user.delete).toHaveBeenCalledWith({
+      where: {
+        id: userId,
+      },
+    });
+  });
+  it('remove returns error when user data is invalid', async () => {
+    const userId = 1;
+    prismaClient.user.delete.mockRejectedValue(new Error());
+    const result = await repository.remove(userId);
+    expect(result.ok).toBe(false);
+    assertErr(result);
+    expect(result.error).toBeInstanceOf(UserRemoveError);
+    expect(prismaClient.user.delete).toHaveBeenCalledWith({
       where: {
         id: userId,
       },
