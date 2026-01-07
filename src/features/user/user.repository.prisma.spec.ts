@@ -60,4 +60,25 @@ describe('PrismaUserRepository', () => {
     expect(result.error).toBeInstanceOf(UserSaveError);
     expect(prismaClient.user.create).toHaveBeenCalledWith({ data: userData });
   });
+  it('findById returns UserEntity when user data is valid', async () => {
+    const userId = 1;
+    prismaClient.user.findUnique.mockResolvedValue({
+      id: userId,
+      username: 'user',
+      role: 'user',
+      password: 'password',
+    });
+    const result = await repository.findById(userId);
+    expect(result).toEqual({
+      id: userId,
+      username: 'user',
+      role: UserRoles.User,
+      password: 'password',
+    });
+    expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: userId,
+      },
+    });
+  });
 });
