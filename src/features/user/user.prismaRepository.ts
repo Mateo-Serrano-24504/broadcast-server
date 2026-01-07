@@ -2,7 +2,7 @@ import { UserData } from './user.types';
 import { Err, Ok, Result } from '../../types';
 import { UserEntity } from './user.entity';
 import { UserRemoveError, UserSaveError } from './user.errors';
-import { userFromPrismaUser } from '../../db';
+import { userFromPrismaUser } from './user.utils';
 import { UserRepository } from './user.repository';
 import { PrismaClient } from '@prisma/client';
 

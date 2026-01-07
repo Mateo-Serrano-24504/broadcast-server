@@ -1,7 +1,7 @@
 import { RefreshTokenEntity, RefreshTokenData } from './token.types';
 import { PrismaClient } from '@prisma/client';
 import { Err, Ok, Result } from '../../../types';
-import { refreshTokenFromPrismaRefreshToken } from '../../../db';
+import { refreshTokenFromPrismaRefreshToken } from './token.utils';
 import {
   TokenRemoveError,
   TokenSaveError,

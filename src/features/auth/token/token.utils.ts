@@ -1,17 +1,10 @@
-import { UserEntity } from '../features/user';
+import { RefreshTokenEntity } from './token.types';
+import { userRoleFromString } from '../../user';
 import {
   RefreshToken as PrismaRefreshToken,
   User as PrismaUser,
 } from '@prisma/client';
-import { userRoleFromString } from '../features/user/user.types';
-import { assertOk } from '../types';
-import { RefreshTokenEntity } from '../features/auth/token';
-
-export function userFromPrismaUser(user: PrismaUser): UserEntity {
-  const userRole = userRoleFromString(user.role);
-  assertOk(userRole);
-  return { ...user, role: userRole.value };
-}
+import { assertOk } from '../../../types';
 
 export function refreshTokenFromPrismaRefreshToken(
   token: PrismaRefreshToken & { user: PrismaUser }
