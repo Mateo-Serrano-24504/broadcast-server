@@ -1,11 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { UserService } from './user.service';
 import { UserLoginError } from './user.errors';
-import { assertErr } from '../../types/result';
+import { assertErr, Ok } from '../../types/result';
 
 describe('UserService', () => {
   let repo: {
     findByUsernameAndPassword: ReturnType<typeof vi.fn>;
+    save: ReturnType<typeof vi.fn>;
   };
   let auth: {
     generateTokens: ReturnType<typeof vi.fn>;
@@ -19,6 +20,7 @@ describe('UserService', () => {
   beforeEach(() => {
     repo = {
       findByUsernameAndPassword: vi.fn(),
+      save: vi.fn(),
     };
     auth = {
       generateTokens: vi.fn(),
@@ -78,5 +80,41 @@ describe('UserService', () => {
     expect(result.error).toBeInstanceOf(UserLoginError);
 
     expect(repo.findByUsernameAndPassword).toHaveBeenCalledWith('user', 'hash');
+  });
+
+  it('returns tokens when credentials are valid in register', async () => {
+    const user = {
+      id: 1,
+      role: 'user',
+      username: 'user',
+      password: '1234',
+    };
+
+    repo.save.mockResolvedValue(Ok(user));
+    auth.generateTokens.mockReturnValue({
+      accessToken: 'access',
+      refreshToken: 'refresh',
+    });
+    hasher.hash.mockResolvedValue('hash');
+
+    const result = await service.register({
+      username: 'user',
+      password: '1234',
+    });
+
+    expect(result).toEqual({
+      ok: true,
+      value: {
+        accessToken: 'access',
+        refreshToken: 'refresh',
+      },
+    });
+
+    expect(repo.save).toHaveBeenCalledWith({
+      username: 'user',
+      password: 'hash',
+      role: 'user',
+    });
+    expect(auth.generateTokens).toHaveBeenCalledWith(user);
   });
 });
