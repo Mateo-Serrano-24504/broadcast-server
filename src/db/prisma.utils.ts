@@ -10,12 +10,7 @@ import { RefreshTokenEntity } from '../features/auth/token';
 export function userFromPrismaUser(user: PrismaUser): UserEntity {
   const userRole = userRoleFromString(user.role);
   assertOk(userRole);
-  return {
-    id: user.id,
-    username: user.username,
-    role: userRole.value,
-    password: user.password,
-  };
+  return { ...user, role: userRole.value };
 }
 
 export function refreshTokenFromPrismaRefreshToken(
@@ -24,9 +19,7 @@ export function refreshTokenFromPrismaRefreshToken(
   const userRole = userRoleFromString(token.user.role);
   assertOk(userRole);
   return {
-    get id(): number {
-      return token.id;
-    },
+    id: token.id,
     token: token.token,
     userCredentials: {
       id: token.userId,
