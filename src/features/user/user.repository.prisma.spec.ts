@@ -1,6 +1,8 @@
 import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { PrismaUserRepository } from './user.repository.prisma';
 import { UserRoles } from './user.types';
+import { assertErr } from '../../types/result';
+import { UserSaveError } from './user.errors';
 
 describe('PrismaUserRepository', () => {
   let prismaClient: {
@@ -43,6 +45,19 @@ describe('PrismaUserRepository', () => {
         password: 'password',
       },
     });
+    expect(prismaClient.user.create).toHaveBeenCalledWith({ data: userData });
+  });
+  it('save returns error when user data is invalid', async () => {
+    const userData = {
+      username: 'user',
+      password: 'password',
+      role: UserRoles.User,
+    };
+    prismaClient.user.create.mockRejectedValue(new Error());
+    const result = await repository.save(userData);
+    expect(result.ok).toBe(false);
+    assertErr(result);
+    expect(result.error).toBeInstanceOf(UserSaveError);
     expect(prismaClient.user.create).toHaveBeenCalledWith({ data: userData });
   });
 });
