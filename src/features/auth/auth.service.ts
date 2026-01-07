@@ -1,6 +1,6 @@
 import { UserCredentials } from './auth.types';
 import { TokenService, TokenSet } from './token';
-import { User } from '../user';
+import { UserEntity } from '../user';
 import { RefreshTokenService } from './token/token.refreshToken.Service';
 
 export class AuthService {
@@ -9,7 +9,7 @@ export class AuthService {
     private refreshTokenService: RefreshTokenService<UserCredentials, string>
   ) {}
 
-  private getUserCredentials(user: User): UserCredentials {
+  private getUserCredentials(user: UserEntity): UserCredentials {
     return { id: user.id, username: user.username, role: user.role };
   }
   private async generateAccessToken(
@@ -22,7 +22,7 @@ export class AuthService {
   ): Promise<string> {
     return this.refreshTokenService.generateToken(credentials);
   }
-  async generateTokens(user: User): Promise<TokenSet> {
+  async generateTokens(user: UserEntity): Promise<TokenSet> {
     const credentials = this.getUserCredentials(user);
     return {
       access: await this.generateAccessToken(credentials),

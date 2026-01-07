@@ -1,11 +1,11 @@
-import { User } from '../user';
+import { UserEntity } from '../user';
 import { RoomData } from '../room';
 
 export class Room {
   constructor(
     private _name: string,
     private _id: number,
-    private _users: Array<User>
+    private _users: Array<UserEntity>
   ) {}
   static fromRoomData(id: number, roomData: RoomData): Room {
     return new Room(roomData.name, id, []);

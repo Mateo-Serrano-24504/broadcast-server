@@ -1,6 +1,6 @@
 import { UserData } from './user.types';
 import { Err, Ok, Result } from '../../types';
-import { User } from './user.entity';
+import { UserEntity } from './user.entity';
 import { UserRemoveError, UserSaveError } from './user.errors';
 import { userFromPrismaUser } from '../../db';
 import { UserRepository } from './user.repository';
@@ -9,7 +9,7 @@ import { PrismaClient } from '@prisma/client';
 export class PrismaUserRepository implements UserRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async save(userData: UserData): Promise<Result<User, UserSaveError>> {
+  async save(userData: UserData): Promise<Result<UserEntity, UserSaveError>> {
     try {
       const user = await this.prisma.user.create({
         data: userData,
@@ -20,7 +20,7 @@ export class PrismaUserRepository implements UserRepository {
     }
   }
 
-  async findById(userId: number): Promise<User | null> {
+  async findById(userId: number): Promise<UserEntity | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
@@ -29,7 +29,7 @@ export class PrismaUserRepository implements UserRepository {
     return user ? userFromPrismaUser(user) : null;
   }
 
-  async remove(userId: number): Promise<Result<User, UserRemoveError>> {
+  async remove(userId: number): Promise<Result<UserEntity, UserRemoveError>> {
     try {
       const user = await this.prisma.user.delete({
         where: {
@@ -42,7 +42,7 @@ export class PrismaUserRepository implements UserRepository {
     }
   }
 
-  async findByData(userData: UserData): Promise<User | null> {
+  async findByData(userData: UserData): Promise<UserEntity | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         username: userData.username,
@@ -63,7 +63,7 @@ export class PrismaUserRepository implements UserRepository {
   async findByUsernameAndPassword(
     username: string,
     password: string
-  ): Promise<User | null> {
+  ): Promise<UserEntity | null> {
     const user = await this.prisma.user.findUnique({
       where: { username, password },
     });

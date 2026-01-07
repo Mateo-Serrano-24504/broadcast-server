@@ -1,6 +1,6 @@
 import { Room, RoomData, RoomCreateError } from '../room';
 import { Result } from '../../types';
-import { User } from '../user';
+import { UserEntity } from '../user';
 
 export interface RoomRepository {
   save(roomData: RoomData): Promise<Result<Room, RoomCreateError>>;
@@ -9,6 +9,9 @@ export interface RoomRepository {
   findRoomById(roomId: number): Promise<null | Room>;
   finRoomsByName(roomName: string): Promise<null | Room[]>;
 
-  addUserToRoom(roomId: number, user: User): Promise<boolean>;
-  removeUserFromRoom(roomId: number, userId: number): Promise<void | User>;
+  addUserToRoom(roomId: number, user: UserEntity): Promise<boolean>;
+  removeUserFromRoom(
+    roomId: number,
+    userId: number
+  ): Promise<void | UserEntity>;
 }

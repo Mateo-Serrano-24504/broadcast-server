@@ -1,5 +1,5 @@
 export { userRouter } from './user.router';
-export { User } from './user.entity';
+export { UserEntity } from './user.entity';
 export { UserRoles, type UserRole, type UserData } from './user.types';
 export { UserRepository } from './user.repository';
 export { UserService } from './user.service';
