@@ -166,4 +166,31 @@ describe('PrismaUserRepository', () => {
       },
     });
   });
+  it('verifyById returns true when user data is valid', async () => {
+    const userId = 1;
+    prismaClient.user.findUnique.mockResolvedValue({
+      id: userId,
+      username: 'user',
+      role: 'user',
+      password: 'password',
+    });
+    const result = await repository.verifyById(userId);
+    expect(result).toBe(true);
+    expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: userId,
+      },
+    });
+  });
+  it('verifyById returns false when user data is invalid', async () => {
+    const userId = 1;
+    prismaClient.user.findUnique.mockResolvedValue(null);
+    const result = await repository.verifyById(userId);
+    expect(result).toBe(false);
+    expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: userId,
+      },
+    });
+  });
 });
