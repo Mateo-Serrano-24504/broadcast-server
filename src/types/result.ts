@@ -23,3 +23,9 @@ export function assertOk<T>(value: Result<T, unknown>): asserts value is Ok<T> {
     throw new Error('Expected an Ok result');
   }
 }
+
+export function assertErr<T>(err: Result<T, unknown>): asserts err is Err<T> {
+  if (err.ok) {
+    throw new Error('Expected an Err result');
+  }
+}
