@@ -4,6 +4,6 @@ export default defineConfig({
   test: {
     globals: true, // describe, it, expect sin imports
     environment: 'node', // backend
-    include: ['**/*.test.ts'],
+    include: ['**/*.test.ts', '**/*.spec.ts'],
   },
 });
