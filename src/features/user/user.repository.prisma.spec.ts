@@ -193,4 +193,42 @@ describe('PrismaUserRepository', () => {
       },
     });
   });
+  it('findByUsernameAndPassword returns UserEntity when user data is valid', async () => {
+    prismaClient.user.findUnique.mockResolvedValue({
+      id: 1,
+      username: 'user',
+      role: 'user',
+      password: 'password',
+    });
+    const result = await repository.findByUsernameAndPassword(
+      'user',
+      'password'
+    );
+    expect(result).toEqual({
+      id: 1,
+      username: 'user',
+      role: UserRoles.User,
+      password: 'password',
+    });
+    expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        username: 'user',
+        password: 'password',
+      },
+    });
+  });
+  it('findByUsernameAndPassword returns null when user data is invalid', async () => {
+    prismaClient.user.findUnique.mockResolvedValue(null);
+    const result = await repository.findByUsernameAndPassword(
+      'user',
+      'password'
+    );
+    expect(result).toEqual(null);
+    expect(prismaClient.user.findUnique).toHaveBeenCalledWith({
+      where: {
+        username: 'user',
+        password: 'password',
+      },
+    });
+  });
 });
