@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { RefreshTokenRepository } from './token.refreshTokenRepository';
+import { RefreshTokenRepository } from './token.refresh.repository';
 import { UserCredentials } from '../auth.types';
 import { assertOk } from '../../../types';
 import { assertHasValue } from '../../../utils/functions';

@@ -6,8 +6,8 @@ import { refreshTokenFromPrismaRefreshToken } from './token.utils';
 import {
   TokenRemoveError,
   TokenSaveError,
-} from './token.refreshTokenRepository.errors';
-import { RefreshTokenRepository } from './token.refreshTokenRepository';
+} from './token.refresh.repository.errors';
+import { RefreshTokenRepository } from './token.refresh.repository';
 
 export class PrismaRefreshTokenRepository implements RefreshTokenRepository {
   constructor(private readonly prisma: PrismaClient) {}
