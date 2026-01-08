@@ -15,10 +15,8 @@ export class UserController {
 
   async registerUser(registerDTO: RegisterDTO) {
     const result = await this.userService.register(registerDTO);
-    let statusCode;
-    if (result.ok) {
-      statusCode = 201;
-    } else {
+    let statusCode = 201;
+    if (!result.ok) {
       statusCode = 400;
     }
     return { result, statusCode };

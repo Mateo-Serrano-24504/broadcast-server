@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { UserController } from './user.controller';
 import { Err, Ok } from '../../types';
-import { UserLoginError } from './user.errors';
+import { UserLoginError, UserRegisterError } from './user.errors';
 
 describe('UserController', () => {
   let userService: {
@@ -51,6 +51,43 @@ describe('UserController', () => {
       userService.login.mockResolvedValue(Err(expectedError));
 
       const result = await controller.loginUser(loginDTO);
+
+      expect(result).toEqual(expectedResult);
+    });
+  });
+  describe('register', () => {
+    it('register returns tokens and code 201 when credentials are valid', async () => {
+      const loginDTO = {
+        username: 'username',
+        password: 'password',
+      };
+      const tokenSet = {
+        accessToken: 'token',
+        refreshToken: 'token',
+      };
+      const expectedResult = {
+        statusCode: 201,
+        result: Ok(tokenSet),
+      };
+      userService.register.mockResolvedValue(Ok(tokenSet));
+
+      const result = await controller.registerUser(loginDTO);
+
+      expect(result).toEqual(expectedResult);
+    });
+    it('register returns an error and code 400 when credentials are invalid', async () => {
+      const loginDTO = {
+        username: 'username',
+        password: 'password',
+      };
+      const expectedError = new UserRegisterError();
+      const expectedResult = {
+        statusCode: 400,
+        result: Err(expectedError),
+      };
+      userService.register.mockResolvedValue(Err(expectedError));
+
+      const result = await controller.registerUser(loginDTO);
 
       expect(result).toEqual(expectedResult);
     });
