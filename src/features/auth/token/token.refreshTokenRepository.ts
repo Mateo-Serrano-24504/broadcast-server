@@ -1,5 +1,6 @@
 import { TokenRepository } from './token.repository';
-import { RefreshTokenData, RefreshTokenEntity } from './token.types';
+import { RefreshTokenData } from './token.types';
+import { RefreshTokenEntity } from './token.refresh.entity';
 
 export type RefreshTokenRepository = TokenRepository<
   RefreshTokenEntity,

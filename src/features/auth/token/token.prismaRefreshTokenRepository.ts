@@ -1,4 +1,5 @@
-import { RefreshTokenEntity, RefreshTokenData } from './token.types';
+import { RefreshTokenData } from './token.types';
+import { RefreshTokenEntity } from './token.refresh.entity';
 import { PrismaClient } from '@prisma/client';
 import { Err, Ok, Result } from '../../../types';
 import { refreshTokenFromPrismaRefreshToken } from './token.utils';

@@ -1,4 +1,4 @@
-import { RefreshTokenEntity } from './token.types';
+import { RefreshTokenEntity } from './token.refresh.entity';
 import { userRoleFromString } from '../../user';
 import {
   RefreshToken as PrismaRefreshToken,
