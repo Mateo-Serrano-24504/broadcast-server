@@ -5,7 +5,12 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   async loginUser(loginDTO: LoginDTO) {
-    return await this.userService.login(loginDTO);
+    const result = await this.userService.login(loginDTO);
+    let statusCode = 201;
+    if (!result.ok) {
+      statusCode = 400;
+    }
+    return { result, statusCode };
   }
 
   async registerUser(registerDTO: RegisterDTO) {
