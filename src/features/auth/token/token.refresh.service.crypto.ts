@@ -3,7 +3,7 @@ import { RefreshTokenRepository } from './token.refresh.repository';
 import { UserCredentials } from '../auth.types';
 import { assertOk } from '../../../types';
 import { assertHasValue } from '../../../utils/functions';
-import { RefreshTokenService } from './token.refreshToken.Service';
+import { RefreshTokenService } from './token.refresh.service';
 
 export class CryptoTokenService implements RefreshTokenService<
   UserCredentials,

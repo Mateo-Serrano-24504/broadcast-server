@@ -1,7 +1,7 @@
 import { UserCredentials } from './auth.types';
 import { TokenService, TokenSet } from './token';
 import { UserEntity } from '../user';
-import { RefreshTokenService } from './token/token.refreshToken.Service';
+import { RefreshTokenService } from './token/token.refresh.service';
 
 export class AuthService {
   constructor(
