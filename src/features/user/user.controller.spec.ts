@@ -57,7 +57,7 @@ describe('UserController', () => {
   });
   describe('register', () => {
     it('register returns tokens and code 201 when credentials are valid', async () => {
-      const loginDTO = {
+      const registerDTO = {
         username: 'username',
         password: 'password',
       };
@@ -71,12 +71,12 @@ describe('UserController', () => {
       };
       userService.register.mockResolvedValue(Ok(tokenSet));
 
-      const result = await controller.registerUser(loginDTO);
+      const result = await controller.registerUser(registerDTO);
 
       expect(result).toEqual(expectedResult);
     });
     it('register returns an error and code 400 when credentials are invalid', async () => {
-      const loginDTO = {
+      const registerDTO = {
         username: 'username',
         password: 'password',
       };
@@ -87,7 +87,7 @@ describe('UserController', () => {
       };
       userService.register.mockResolvedValue(Err(expectedError));
 
-      const result = await controller.registerUser(loginDTO);
+      const result = await controller.registerUser(registerDTO);
 
       expect(result).toEqual(expectedResult);
     });
